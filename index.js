@@ -1,13 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+require('./models');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser  = require("body-parser");
-const { updateTickerData } = require('./functions');
+const { updateTickerData, updateChartData } = require('./functions');
 const keys = require('./config/keys');
 const { mongoURI } = require('./config/mongoURI');
-require('./models');
+
 require('./services/passport');
 
 mongoose.connect(mongoURI);
@@ -32,7 +33,8 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 require('./routes/authRoutes')(app);
 require('./routes/stockRoutes')(app);
 
-// updateTickerData(11 * 1000);
+updateTickerData(11 * 1000);
+updateChartData(60 * 5 * 1000);
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets
