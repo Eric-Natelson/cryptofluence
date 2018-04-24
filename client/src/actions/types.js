@@ -11,7 +11,12 @@ module.exports = {
    FETCH_CHART_DATA: 'fetch_chart_data',
    LOAD_CHART_DATA: 'load_chart_data',
    SELECT_CHART: 'select_chart',
-   SELECT_CHART_FREQ: 'select_chart_freq'
+   SELECT_CHART_FREQ: 'select_chart_freq',
+   FETCH_NEWS_GENERAL: 'fetch_news_general',
+   FETCH_NEWS_CUSTOM: 'fetch_news_custom',
+   OPEN_SNACKBAR: 'open_snackbar',
+   CLOSE_SNACKBAR: 'close_snackbar',
+   ADD_TICKER_LOGO: 'add_ticker_logo',
 }
 
 // export const GET_TICKER_DATA = 'get_ticker_data';

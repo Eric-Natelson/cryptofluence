@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactTestUtils from 'react-dom/test-utils';
 import { bindActionCreators } from 'redux';
 import { loadChartData, selectChartFreq } from '../actions'
 import {Line} from 'react-chartjs-2';
 import { Row, Col } from 'react-materialize';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import _ from 'lodash';
-import { FETCH_CHART_DATA, LOAD_CHART_DATA, TYPE } from '../actions/types';
-
+import { TYPE } from '../actions/types';
 
 class Chart extends Component {
-   constructor(props) {
-      super(props);
-   }
-
    componentDidMount() {
       this.props.loadChartData();
    }
@@ -49,7 +43,7 @@ class Chart extends Component {
 
          if ( chartData[type] && chartData[type][name] && chartData[type][name][frequency]) {
             prices = chartData[type][name][frequency].prices;
-            if(type == TYPE.CRYPTO) {
+            if(type === TYPE.CRYPTO) {
                times = chartData[type][name][frequency].times.map( time => new Date(time*1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) );
             }
             else {
@@ -63,9 +57,9 @@ class Chart extends Component {
         datasets: [
           {
             label: frequency,
-            fill: true,
+            fill: false,
             lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.2)',
+            backgroundColor: 'rgba(75,192,192,0.5)',
             borderColor: 'rgba(95, 202, 157, 1)',
             borderCapStyle: 'butt',
             borderDash: [],
@@ -88,22 +82,35 @@ class Chart extends Component {
 
    renderLabel() {
       let priceText = '';
+      let logo_url = '';
       if (this.props.selectedChart) {
          const { name, type } = this.props.selectedChart;
          if (this.props.priceList && this.props.priceList[type] && this.props.priceList[type][name] ) {
-            const { quantity } = _.find( this.props.tickerList, { name, type} );
+
+            const { quantity, logo } = _.find( this.props.tickerList, { name, type } );
+
+            const logo_url = logo;
+            console.log("This is the logo url", logo);
+
             const price = Number(this.props.priceList[type][name]).toFixed(2);
             priceText = { price, amtOwned: Number(price*quantity).toFixed(2) };
+
          }
       }
 
       return (
-         <Row>
-            <div>
-               <Col id="ticker-name" s={2}><h4 className="white-text ticker-name">{this.props.selectedChart.name}</h4></Col>
-               <Col s={4}><p className="white-text">price: ${priceText.price} <br />value owned: ${priceText.amtOwned}</p></Col>
-            </div>
-         </Row>
+               <Row>
+                  <Col s={2} className="ticker-name">
+                     <h5 className="white-text">{this.props.selectedChart.name}:</h5>
+                  </Col>
+                  <Col s={10}>
+                     <h5 className="ticker-price">${priceText.price} </h5>
+                  </Col>
+                  <Row>
+                     <Col s={9} className="" ><h6 className="white-text">value owned: ${priceText.amtOwned}</h6></Col>
+                  </Row>
+               </Row>
+
       )
    }
 
@@ -129,10 +136,8 @@ class Chart extends Component {
       return (
          <div>
            {this.renderLabel()}
-            <div id="chartPiece">
               {this.renderTabs()}
-               <Line data={this.formatChartData()}></Line>
-            </div>
+               <Line className="Graph" data={this.formatChartData()}></Line>
          </div>
       );
    }

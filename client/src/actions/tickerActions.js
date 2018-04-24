@@ -1,5 +1,5 @@
-import { ADD_TICKER, REMOVE_TICKER, ADD_TICKER_PRICE, SELECT_CHART, FETCH_CHART_DATA,
-         LOAD_TICKERS, UPDATE_TICKER_QUANTITY, LOAD_TICKER_PRICES } from './types'
+import { ADD_TICKER, REMOVE_TICKER, ADD_TICKER_PRICE, SELECT_CHART,
+         LOAD_TICKERS, UPDATE_TICKER_QUANTITY, LOAD_TICKER_PRICES, OPEN_SNACKBAR, ADD_TICKER_LOGO } from './types'
 import axios from 'axios';
 import { fetchChartData } from './chartActions';
 
@@ -11,7 +11,7 @@ export const addTicker = (newTicker, tickerListSize) => async dispatch => { //ad
    dispatch({ type: ADD_TICKER, payload: newTicker });
 
    const res = await axios.post('/api/tickers', newTicker);
-   const { price } = res.data;
+   const { price, logo } = res.data;
    console.log('res.data = ', res.data);
 
    if ( res.data.hasOwnProperty('error') ) { //if ticker is not valid for API
@@ -19,7 +19,9 @@ export const addTicker = (newTicker, tickerListSize) => async dispatch => { //ad
    }
    else { //add ticker price and load chart data
       dispatch({ type: ADD_TICKER_PRICE, payload: { name, type, price } });
-      if (tickerListSize == 0) { //if nothing in tickerList, nothing will be graphed. Graph newly added ticker, since it is the only ticker
+      dispatch({ type: ADD_TICKER_LOGO, payload: { name, type, logo } });
+      dispatch({ type: OPEN_SNACKBAR, payload: { name, type } });
+      if (tickerListSize === 0) { //if nothing in tickerList, nothing will be graphed. Graph newly added ticker, since it is the only ticker
          dispatch({ type: SELECT_CHART, payload: {name, type} });
       }
       dispatch(fetchChartData(name, type));
@@ -43,6 +45,5 @@ export const updateQuantity = ( name, type, quantity ) => async dispatch => { //
 
 export const loadTickerPrices = () => async dispatch => { //used to load initial ticker prices when page is loaded
    const res = await axios.get('/api/tickers/current_prices');
-   console.log('loadtickerprices');
    dispatch({ type: LOAD_TICKER_PRICES, payload: res.data});
 }

@@ -1,12 +1,11 @@
 const axios = require('axios');
 const _ = require('lodash');
-const { replaceKeys } = require('./routes');
-require('./models/Users');
-require('./models/Tickers');
-const { TYPE, BASE_URL } = require('./config/keys');
+
 const mongoose = require('mongoose');
 const Ticker = mongoose.model('ticker');
-const { addTickerToCharts } = require('./routes/routeFunctions');
+
+const { addTickerToCharts } = require('./tickerDB');
+const { TYPE, BASE_URL } = require('../config/keys');
 
 const updateTickerDataCall = async () => {
    try {
@@ -29,7 +28,7 @@ const updateTickerDataCall = async () => {
          else if (type == TYPE.STOCK) {
             PRICE_URL = `${BASE_URL.STOCK}/stock/${name}/quote`;
          }
-         console.log('url for ', name, type, 'is ', PRICE_URL);
+         /*console.log('url for ', name, type, 'is ', PRICE_URL);*/
          return { name, type, url: PRICE_URL}
       });
 
@@ -50,7 +49,7 @@ const updateTickerDataCall = async () => {
          else { //stock
             price = resolved[i].data.latestPrice;
          }
-         console.log('Updating price for ', name, type, price);
+         /*console.log('Updating price for ', name, type, price);*/
          const tic = await Ticker.findByIdAndUpdate( _id, { $set: { price } });
       }
    } catch(err) {

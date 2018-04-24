@@ -1,4 +1,4 @@
-import { ADD_TICKER, REMOVE_TICKER, LOAD_TICKERS, UPDATE_TICKER_QUANTITY } from '../actions/types';
+import { ADD_TICKER, REMOVE_TICKER, LOAD_TICKERS, UPDATE_TICKER_QUANTITY, ADD_TICKER_LOGO } from '../actions/types';
 import _ from 'lodash';
 
 export default function(state = [], action) {
@@ -8,10 +8,10 @@ export default function(state = [], action) {
    case REMOVE_TICKER:
       const newState = state.filter( ticker => {
          const { name, type } = action.payload;
-         if (ticker.name != name) {
+         if (ticker.name !== name) {
             return true;
          }
-         else if (ticker.type != action.payload.type) { //if name is same but type is different
+         else if (ticker.type !== type) { //if name is same but type is different
             return true;
          }
          return false;
@@ -26,6 +26,10 @@ export default function(state = [], action) {
       _.find(newState, { name, type }).quantity = quantity;
       return newState;
    }
+   case ADD_TICKER_LOGO: {
+      const { name, type, logo } = action.payload;
+      const newState = [ ...state ];
+      _.find(newState, { name, type }).logo = logo;   }
    default:
       return state;
   }
