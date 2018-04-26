@@ -79,7 +79,7 @@ class PortfolioList extends Component {
 
          return (
             <TableRow selected={selected}>
-               <TableRowColumn><img className="ticker-img" src={logo} height="18" width="18"></img></TableRowColumn>
+               <TableRowColumn><img className="ticker-img" src={logo} height="20" width="20"></img></TableRowColumn>
                <TableRowColumn>{name}</TableRowColumn>
                <TableRowColumn>{currentPrice}</TableRowColumn>
                <TableRowColumn>{quantity}</TableRowColumn>
@@ -194,7 +194,7 @@ class PortfolioList extends Component {
    render() {
       return (
          <div>
-            <SearchBar type={TYPE.CRYPTO}/>
+         <SearchBar type={TYPE.CRYPTO}/>
 
             <div className='row'>
                <Collapsible defaultActiveKey={0} popout>

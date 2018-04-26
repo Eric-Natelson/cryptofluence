@@ -22,11 +22,10 @@ class Header extends Component {
       return (
          <div class="navbar-fixed">
             <nav id='header'>
-               <div class="nav-wrapper">
+               <div id="nav-wrapper">
                   <Link
-                     to={this.props.auth ? '/' : '/landing'}
-                     className="brand-logo" id="logo">
-                     cryptofluence
+                     to={this.props.auth ? '/' : '/landing'}>
+                     <img id="logo" src={require("../img/logo.png")} height="100"></img>
                   </Link>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>{this.renderContent()}</li>

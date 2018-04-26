@@ -145,19 +145,33 @@ exports.addTickerToTickers = async (newTicker = {name: '', type: '' }) => { //re
 
        if (type == TYPE.STOCK) {
          const URL = `${BASE_URL.STOCK}/stock/${name}/quote`;
-         const URL_2 = `${BASE_URL.STOCK}/stock/${name}/logo`;
+         const LOGO_URL = `${BASE_URL.STOCK}/stock/${name}/logo`;
+         // const URL_3 = `${BASE_URL.STOCK}/stock/${name}/dividends`;
 
          let { data } = await axios.get(URL);
-         const price = data.latestPrice;
 
-         let logo = (await axios.get(URL_2)).data.url;
+         let price = data.latestPrice;
 
+         const tickerData = {
+            open: data.open,
+            high: data.high,
+            low: data.low,
+            week52High: data.week52High,
+            week52Low: data.week52Low,
+            volume: data.low,
+            avgVolume: data.avgTotalVolume,
+            marketCap: data.marketCap,
+            peRatio: data.pwRatio,
+            sector: data.sector,
+         };
+
+         let logo = (await axios.get(LOGO_URL)).data.url;
 
          if ( data.hasOwnProperty('Error Message') ) { //invalid stock or crypto
            return false;
          }
          else { //valid ticker
-           const addTicker = new Ticker ({ ...newTicker, price, logo });
+           const addTicker = new Ticker ({ ...newTicker, price, logo, data: tickerData });
            await addTicker.save();
            return true;
          }
@@ -165,23 +179,43 @@ exports.addTickerToTickers = async (newTicker = {name: '', type: '' }) => { //re
 
       if (type == TYPE.CRYPTO) {
          const coinbaseTickers = ['BTC', 'ETH', 'LTC', 'BCH'];
-         let PRICE_URL;
+         let PRICE_URL, STATS_URL;
+
          if ( _.includes(coinbaseTickers, name) ) {
             PRICE_URL = `${BASE_URL.CRYPTO}price?fsym=${name}&tsyms=USD&e=Coinbase`;
+            STATS_URL = `${BASE_URL.CRYPTO}generateAvg?fsym=${name}&tsym=USD&e=Coinbase`;
          }
          else {
             PRICE_URL = `${BASE_URL.CRYPTO}price?fsym=${name}&tsyms=USD`;
+            STATS_URL = `${BASE_URL.CRYPTO}generateAvg?fsym=${name}&tsym=USD&e=Poloniex`;
          }
 
          const res = await axios.get(PRICE_URL);//.data.USD;
          const price = res.data.USD;
+
+         let stats = (await axios.get(STATS_URL)).data.RAW;
+
+         const tickerData = {
+            open: stats.OPEN24HOUR,
+            high: stats.HIGH24HOUR,
+            low: stats.LOW24HOUR,
+            week52Low: 9999,
+            week52High: 9999,
+            volume: stats.VOLUME24HOUR,
+            marketCap: 9999,
+            supply: 9999,
+         };
+
+
+         console.log('Crypto stats: ', stats );
+
 
          if (res.data.Response == 'Error') {
             return false;
          }
 
          try {
-            const addTicker = new Ticker({ ...newTicker, price })
+            const addTicker = new Ticker({ ...newTicker, price, data: tickerData });
             await addTicker.save();
          } catch(err) {
             console.log(err)

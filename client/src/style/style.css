@@ -1,10 +1,9 @@
 #logo {
-  padding-left: 20px;
-  font-size: 25px;
-  font-weight: 300; }
+  padding-left: 40px;
+  padding-bottom: 35px; }
 
 #header {
-  background-color: #5FCA9D;
+  background-color: #5C6BC0;
   z-index: 1; }
 
 #AccountDropDown-NavItem {
@@ -16,7 +15,18 @@
   padding-right: 20px; }
 
 .snack-bar {
-  text-align: center; }
+  text-align: center;
+  padding-bottom: 15px; }
+
+.stat-heading {
+  text-align: left;
+  font-weight: 250;
+  font-size: 16px;
+  margin: 0px; }
+
+.stat-number {
+  text-align: left;
+  font-weight: 250; }
 
 .copyRight {
   text-align: center; }
@@ -38,13 +48,24 @@
   width: 100%;
   height: 100%;
   border-radius: 5px 5px 0px 0px;
-  background-color: #6f7984; }
+  background-color: #6f7984;
+  align-items: center; }
 
 .NewsList {
   background-color: #6f7984;
+  font-weight: 300;
+  font-size: 10px;
   margin-top: 15%;
   border-radius: 3px;
-  width: 100%; }
+  -webkit-animation: fadein 2s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s;
+  /* Firefox < 16 */
+  -ms-animation: fadein 2s;
+  /* Internet Explorer */
+  -o-animation: fadein 2s;
+  /* Opera < 12.1 */
+  animation: fadein 2s; }
 
 .News-Subheader {
   background-color: #6f7984;
@@ -84,6 +105,40 @@
   padding-left: 5%;
   margin: auto;
   width: 60%; }
+
+@keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 
 .Graph {
   overflow: hidden; }
@@ -357,7 +412,6 @@ a:focus, a:hover {
   background-color: #42DCA3; }
 
 .list-inline-item {
-  display: inline-block;
   padding-left: 5px;
   padding-right: 5px; }
 
